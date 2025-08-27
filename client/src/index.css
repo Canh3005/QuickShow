@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #F84565; /* Dark Gray */
+  --color-primary-dull: #D63854; /* Dull Dark Gray */
+}
+
+*{
+  font-family: "Outfit", sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: #787777 #1e1e1e;
+}
+
+body {
+  color: white;
+  background-color: #09090B;
+}
+
+.no-scrollbar{
+  scrollbar-width: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* Vô hiệu hóa autofill background - Version mạnh hơn */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #00000080 inset !important;
+    -webkit-text-fill-color: white !important;
+    background-color: #00000080 !important;
+    color: white !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Cho tất cả trình duyệt */
+input:-webkit-autofill::first-line {
+    color: white !important;
+    font-family: inherit !important;
+}
+
+/* Cho Firefox */
+input:-moz-autofill {
+    background-color: #00000080 !important;
+    color: white !important;
+    box-shadow: 0 0 0 30px #00000080 inset !important;
+}
+
+/* Cho Edge */
+input:-ms-autofill {
+    background-color: #00000080 !important;
+    color: white !important;
+}
