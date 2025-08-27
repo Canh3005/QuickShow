@@ -1,0 +1,62 @@
+name: Monorepo CI & Deploy
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+      - name: Install FE deps
+        working-directory: client
+        run: npm ci
+      - name: Lint FE
+        working-directory: client
+        run: npm run lint --if-present
+      - name: Test FE
+        working-directory: client
+        run: npm test --if-present
+      - name: Build FE
+        working-directory: client
+        run: npm run build
+      - name: Deploy FE to Vercel (preview/prod)
+        if: github.ref == 'refs/heads/main'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel --cwd client --prod --confirm --token $VERCEL_TOKEN
+
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+      - name: Install BE deps
+        working-directory: server
+        run: npm ci
+      - name: Lint BE
+        working-directory: server
+        run: npm run lint --if-present
+      - name: Test BE
+        working-directory: server
+        run: npm test --if-present
+      - name: Build BE
+        working-directory: server
+        run: npm run build
+      - name: Deploy BE to Vercel (if BE is a Vercel project)
+        if: github.ref == 'refs/heads/main'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel --cwd server --prod --confirm --token $VERCEL_TOKEN
