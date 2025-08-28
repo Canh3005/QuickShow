@@ -12,11 +12,17 @@ const BookingCard = ({ booking }) => {
       />
       <div className="flex flex-1 justify-between">
         <div className="flex flex-col justify-between gap-2">
-          <div >
-              <p className="font-bold text-2xl mb-2">{booking.show.movie.title}</p>
-              <p className='text-gray-400 text-sm'>{timeFormat(booking.show.movie.runtime)}</p>
+          <div>
+            <p className="font-bold text-2xl mb-2">
+              {booking.show.movie.title}
+            </p>
+            <p className="text-gray-400 text-sm">
+              {timeFormat(booking.show.movie.runtime)}
+            </p>
           </div>
-          <p className='text-gray-400 text-sm'>{dateFormat(booking.show.showDateTime)}</p>
+          <p className="text-gray-400 text-sm">
+            {dateFormat(booking.show.showDateTime)}
+          </p>
         </div>
         <div className="flex flex-col md:items-right md:text-right justify-between ml-4">
           <div className="flex gap-4 items-center justify-end">
