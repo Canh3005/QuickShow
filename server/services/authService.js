@@ -60,11 +60,16 @@ const refreshAccessToken = (token) => {
 const getFacebookAuthUrl = async (req, res) => {
   const state = crypto.randomBytes(16).toString("hex");
   // lưu state vào session/redis/cookie để đối chiếu
-  res.cookie("fb_oauth_state", state, { httpOnly: true, sameSite: "lax" });
+  const stateJwt = jwt.sign(
+    { state: state },
+    process.env.JWT_SECRET,
+    { expiresIn: "5m" } // state chỉ hợp lệ 5 phút
+  );
+  console.log(stateJwt);
   const authUrl = new URL(process.env.FACEBOOK_AUTH_URL);
   authUrl.searchParams.set("client_id", APP_ID);
   authUrl.searchParams.set("redirect_uri", REDIRECT_URI);
-  authUrl.searchParams.set("state", state);
+  authUrl.searchParams.set("state", stateJwt);
   authUrl.searchParams.set("scope", "email,public_profile");
   return authUrl.toString();
 };
@@ -98,11 +103,18 @@ const handleFacebookCallback = async (code) => {
 
   // 3) Tạo người dùng mới
   const existingUser = await User.findOne({ email: me.email });
+  let user;
   if (existingUser) {
-    throw new Error("User already exists");
+    user = existingUser;
+  } else {
+    user = new User({
+      username: me.name,
+      email: me.email,
+      imageUrl: me.picture.data.url,
+      facebookId: me.id,
+    });
+    await user.save();
   }
-  const user = new User({ username: me.name, email: me.email, imageUrl: me.picture.data.url });
-  await user.save();
 
   // 4) Trả về access token và refresh token cho fe
   const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {

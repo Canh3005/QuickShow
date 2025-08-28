@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { MenuIcon, SearchIcon } from "lucide-react";
@@ -103,7 +103,7 @@ const Navbar = () => {
         ) : (
           <div className="relative" ref={menuRef}>
             <img
-              src={user.avatar ? user.avatar : assets.profile}
+              src={user.imageUrl ? user.imageUrl : assets.profile}
               alt="avatar"
               className="w-10 h-10 rounded-full cursor-pointer object-cover"
               onClick={() => setShowMenu((prev) => !prev)}

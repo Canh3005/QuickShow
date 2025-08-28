@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
     },
     imageUrl: {
         type: String,
@@ -25,6 +24,10 @@ const userSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+    facebookId:{
+        type: String,
+        unique: true
     }
 }, {
     timestamps: true,

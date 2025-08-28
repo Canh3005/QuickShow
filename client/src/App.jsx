@@ -37,6 +37,8 @@ const App = () => {
         <Route path='/favorite' element={<Favorite />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/auth/facebook/success' element={<Login />} />
+        <Route path='/auth/facebook/error' element={<Login />} />
         <Route path='/admin/*' element={<Layout />} >
           <Route index element={<Dashboard />} />
           <Route path='add-shows' element={<AddShows />} />

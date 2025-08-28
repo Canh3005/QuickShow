@@ -1,5 +1,6 @@
 import { apiClient } from './client.js';
 import { API_ENDPOINTS } from '../utils/constants.js';
+import { openApiWindow } from './window.js';
 
 export const authApi = {
   register: (userData) => {
@@ -23,10 +24,10 @@ export const authApi = {
   },
 
   loginWithFacebook: () => {
-    return apiClient.get(API_ENDPOINTS.AUTH.LOGIN_WITH_FACEBOOK);
+    return openApiWindow(API_ENDPOINTS.AUTH.LOGIN_WITH_FACEBOOK, "_self");
   },
 
   loginWithGoogle: () => {
-    return apiClient.get(API_ENDPOINTS.AUTH.LOGIN_WITH_GOOGLE);
+    return openApiWindow(API_ENDPOINTS.AUTH.LOGIN_WITH_GOOGLE, "_self");
   }
 };
