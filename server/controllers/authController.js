@@ -48,11 +48,25 @@ const refreshToken = async (req, res) => {
 };
 
 const loginWithFacebook = async (req, res) => {
-  await authService.loginWithFacebook();
+  try {
+    const authUrl = await authService.getFacebookAuthUrl(req, res);
+    res.redirect(authUrl);
+  } catch (error) {
+    res.status(500).json({ error: "Facebook login redirect failed", detail: error.message });
+  }
 };
 
 const facebookCallback = async (req, res) => {
-    await authService.facebookCallback(req, res);
+  try {
+    const { code, state } = req.query;
+    const savedState = req.cookies["fb_oauth_state"];
+    if (!state || state !== savedState) return res.status(400).send("Bad state");
+
+    const { accessToken, refreshToken, user } = await authService.handleFacebookCallback(code);
+    res.status(200).json({ accessToken, refreshToken, user });
+  } catch (error) {
+    res.status(500).json({ error: "Facebook login failed", detail: error.message });
+  }
 };
 
 const authController = {
@@ -61,7 +75,7 @@ const authController = {
   getProfile,
   refreshToken,
   loginWithFacebook,
-  facebookCallback
+  facebookCallback,
 };
 
 export default authController;

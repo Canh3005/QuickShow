@@ -23,10 +23,10 @@ export const authApi = {
   },
 
   loginWithFacebook: () => {
-    return apiClient.post(API_ENDPOINTS.AUTH.LOGIN_WITH_FACEBOOK);
+    return apiClient.get(API_ENDPOINTS.AUTH.LOGIN_WITH_FACEBOOK);
   },
 
   loginWithGoogle: () => {
-    return apiClient.post(API_ENDPOINTS.AUTH.LOGIN_WITH_GOOGLE);
+    return apiClient.get(API_ENDPOINTS.AUTH.LOGIN_WITH_GOOGLE);
   }
 };

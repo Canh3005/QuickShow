@@ -53,12 +53,36 @@ export const authService = {
     }
   },
 
-  loginWithFacebook() {
-    return authApi.loginWithFacebook();
+  async loginWithFacebook() {
+    try {
+      const response = await authApi.loginWithFacebook();
+
+      if (response.accessToken) {
+        storage.set(ACCESS_TOKEN_KEY, response.accessToken);
+        storage.set(REFRESH_TOKEN_KEY, response.refreshToken);
+        storage.set(USER_KEY, response.user);
+      }
+      
+      return response;
+    } catch (error) {
+      throw new Error(error.message || 'Login with Facebook failed');
+    }
   },
 
-  loginWithGoogle() {
-    return authApi.loginWithGoogle();
+  async loginWithGoogle() {
+    try {
+      const response = await authApi.loginWithGoogle();
+
+      if (response.accessToken) {
+        storage.set(ACCESS_TOKEN_KEY, response.accessToken);
+        storage.set(REFRESH_TOKEN_KEY, response.refreshToken);
+        storage.set(USER_KEY, response.user);
+      }
+
+      return response;
+    } catch (error) {
+      throw new Error(error.message || 'Login with Google failed');
+    }
   },
 
   logout() {

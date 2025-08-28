@@ -52,7 +52,7 @@ jobs:
       # - name: Test BE
       #   working-directory: server
       #   run: npm test --if-present
-      - name: Deploy BE to Vercel (if BE is a Vercel project)
+      - name: Deploy BE to Vercel
         if: github.ref == 'refs/heads/main'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
