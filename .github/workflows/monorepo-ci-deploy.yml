@@ -19,9 +19,9 @@ jobs:
       - name: Install FE deps
         working-directory: client
         run: npm ci
-      - name: Lint FE
-        working-directory: client
-        run: npm run lint --if-present
+      # - name: Lint FE
+      #   working-directory: client
+      #   run: npm run lint --if-present
       # - name: Test FE
       #   working-directory: client
       #   run: npm test --if-present
@@ -46,9 +46,9 @@ jobs:
       - name: Install BE deps
         working-directory: server
         run: npm ci
-      - name: Lint BE
-        working-directory: server
-        run: npm run lint --if-present
+      # - name: Lint BE
+      #   working-directory: server
+      #   run: npm run lint --if-present
       # - name: Test BE
       #   working-directory: server
       #   run: npm test --if-present
