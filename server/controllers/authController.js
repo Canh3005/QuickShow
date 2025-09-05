@@ -44,7 +44,9 @@ const refreshToken = async (req, res) => {
     const newAccessToken = authService.refreshAccessToken(token);
     res.status(200).json({ accessToken: newAccessToken });
   } catch (error) {
-    res.status(403).json({ error: "Invalid refresh token" });
+    res
+      .status(403)
+      .json({ error: "Invalid refresh token", detail: error.message });
   }
 };
 
@@ -69,19 +71,28 @@ const facebookCallback = async (req, res) => {
 
     // Verify JWT
     try {
+      // eslint-disable-next-line no-undef
       const decoded = jwt.verify(state, process.env.JWT_SECRET);
+      if (decoded.type !== "facebook_auth") {
+        return res.status(400).send("Invalid state");
+      }
     } catch (err) {
+      console.error(err);
       return res.status(400).send("Invalid or expired state");
     }
 
     const { accessToken, refreshToken, user } =
       await authService.handleFacebookCallback(code);
     // Redirect về FE với token trong query param
+    // eslint-disable-next-line no-undef
     const FE_URL = process.env.FE_URL;
-    const redirectUrl = `${FE_URL}/auth/facebook/success?accessToken=${accessToken}&refreshToken=${refreshToken}&user=${encodeURIComponent(JSON.stringify(user))}`;
+    const redirectUrl = `${FE_URL}/auth/facebook/success?accessToken=${accessToken}&refreshToken=${refreshToken}&user=${encodeURIComponent(
+      JSON.stringify(user)
+    )}`;
     return res.redirect(redirectUrl);
   } catch (error) {
     return res.redirect(
+      // eslint-disable-next-line no-undef
       `${process.env.FE_URL}/auth/facebook/error?message=${error.message}`
     );
   }

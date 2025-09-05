@@ -2,14 +2,17 @@ export const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export const API_ENDPOINTS = {
   AUTH: {
-    LOGIN: '/auth/login',
-    REGISTER: '/auth/register',
-    PROFILE: '/auth/profile',
-    LOGOUT: '/auth/logout',
-    REFRESH_TOKEN: '/auth/refresh-token',
-    LOGIN_WITH_FACEBOOK: '/auth/facebook',
-    LOGIN_WITH_GOOGLE: '/auth/google'
-  }
+    LOGIN: "/auth/login",
+    REGISTER: "/auth/register",
+    PROFILE: "/auth/profile",
+    LOGOUT: "/auth/logout",
+    REFRESH_TOKEN: "/auth/refresh-token",
+    LOGIN_WITH_FACEBOOK: "/auth/facebook",
+    LOGIN_WITH_GOOGLE: "/auth/google",
+  },
+  SHOW: {
+    NOW_PLAYING: "/show/get-now-playing",
+  },
 };
 
 export const HTTP_STATUS = {
@@ -19,5 +22,5 @@ export const HTTP_STATUS = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500
+  INTERNAL_SERVER_ERROR: 500,
 };

@@ -1,38 +1,41 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     username: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
-        type: String,
+      type: String,
     },
     imageUrl: {
-        type: String,
+      type: String,
     },
     role: {
-        type: String,
-        enum: ['user', 'admin'],
-        default: 'user'
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
     },
     isActive: {
-        type: Boolean,
-        default: true
+      type: Boolean,
+      default: true,
     },
-    facebookId:{
-        type: String,
-        unique: true
-    }
-}, {
+    facebookId: {
+      type: String,
+      unique: true,
+    },
+  },
+  {
     timestamps: true,
-});
+  }
+);
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

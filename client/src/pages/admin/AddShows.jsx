@@ -6,6 +6,7 @@ import BlurCircle from "../../components/BlurCircle";
 import { StarIcon } from "lucide-react";
 import kConverter from "../../lib/kConverter";
 import { CheckIcon, DeleteIcon } from "lucide-react";
+import { showApi } from "../../api/show";
 
 const AddShows = () => {
   const currency = import.meta.env.VITE_CURRENCY;
@@ -14,11 +15,12 @@ const AddShows = () => {
   const [showPrice, setShowPrice] = useState(null);
   const [dateTimeInput, setDateTimeInput] = useState("");
   const [dateTimeSelection, setDateTimeSelection] = useState({});
+  const imageBaseUrl = import.meta.env.VITE_TMDB_IMAGE_BASE_URL;
 
   const fetchNowPlayingMovies = async () => {
     try {
-      // Simulate fetching data
-      setNowPlayingMovies(dummyShowsData);
+      const shows = await showApi.getNowPlaying();
+      setNowPlayingMovies(shows);
     } catch (error) {
       console.error("Error fetching now playing movies:", error);
     }
@@ -27,7 +29,6 @@ const AddShows = () => {
   useEffect(() => {
     fetchNowPlayingMovies();
   }, []);
-
 
   const handleDateTimeAdd = () => {
     if (!dateTimeInput) return;
@@ -62,14 +63,14 @@ const AddShows = () => {
           {nowPlayingMovies.map((movie) => (
             <div
               key={movie.id}
-              className="relative max-w-40 cursor-pointer group-hover:not-hover:opacity-40 hover:-translate-y-1 transition duration-300"
+              className="relative max-w-50 cursor-pointer group-hover:not-hover:opacity-40 hover:-translate-y-1 transition duration-300"
               onClick={() => {
                 setSelectedMovie(movie.id);
               }}
             >
-              <div className="relative rounded-lg overflow-hidden">
+              <div className="relative rounded-lg overflow-hidden h-48">
                 <img
-                  src={movie.poster_path}
+                  src={imageBaseUrl + movie.poster_path}
                   alt={movie.title}
                   className="w-full object-cover brightness-90"
                 />
