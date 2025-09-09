@@ -86,9 +86,44 @@ const addShow = async ({ movieId, showsInput, showPrice }) => {
   }
 };
 
+const getAllShows = async () => {
+  try {
+    const shows = await Show.find({ showDateTime: { $gte: new Date() } }).populate('movie');
+    const movies = new Set(shows.map(show => show.movie));
+    return { movies: Array.from(movies) };
+  } catch (error) {
+    console.error("Error fetching all shows:", error);
+    throw error;
+  }
+};
+
+const getShow = async (movieId) => {
+  try {
+    const shows = await Show.find({ movie: movieId, showDateTime: { $gte: new Date() } }).populate('movie');
+    const movie = await Movie.findById(movieId);
+    if (!movie) {
+      throw new Error("Movie not found");
+    }
+    const dateTime = {};
+    shows.forEach(show => {
+      const date = show.showDateTime.toISOString().split('T')[0];
+      if(!dateTime[date]) {
+        dateTime[date] = [];
+      }
+      dateTime[date].push({ time: show.showDateTime, showId: show._id });
+    });
+    return { movie, dateTime };
+  } catch (error) {
+    console.error("Error fetching show by ID:", error);
+    throw error;
+  }
+};
+
 const showService = {
   getNowPlayingShows,
   addShow,
+  getAllShows,
+  getShow,
 };
 
 export default showService;

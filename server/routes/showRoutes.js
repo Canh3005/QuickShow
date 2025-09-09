@@ -7,5 +7,7 @@ const router = express.Router();
 
 router.get("/get-now-playing", auth, isAdmin, showController.getNowPlayingShows);
 router.post("/add-show", auth, isAdmin, showController.addShow);
+router.get("/get-shows", showController.getAllShows);
+router.get("/get-show/:movieId", showController.getShow);
 
 export default router;
