@@ -1,4 +1,6 @@
 import axios from "axios";
+import Movie from "../models/Movie.js";
+import Show from "../models/Show.js";
 
 const getNowPlayingShows = async () => {
   try {
@@ -18,7 +20,75 @@ const getNowPlayingShows = async () => {
   }
 };
 
+const addShow = async ({ movieId, showsInput, showPrice }) => {
+  try {
+    let movie = await Movie.findOne({ _id: movieId });
+    if (!movie) {
+      const [movieDetailsResponse, movieCreditsResponse] = await Promise.all([
+        axios.get(`https://api.themoviedb.org/3/movie/${movieId}`, {
+          headers: {
+            // eslint-disable-next-line no-undef
+            Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+          },
+        }),
+        axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits`, {
+          headers: {
+            // eslint-disable-next-line no-undef
+            Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+          },
+        }),
+      ]);
+
+      const movieApiData = movieDetailsResponse.data;
+      const creditsData = movieCreditsResponse.data;
+
+      const movieDetails = {
+        _id: movieApiData.id,
+        title: movieApiData.title,
+        overview: movieApiData.overview,
+        posterPath: movieApiData.poster_path,
+        backdropPath: movieApiData.backdrop_path,
+        releaseDate: movieApiData.release_date,
+        genres: movieApiData.genres,
+        cast: creditsData.cast,
+        originalLanguage: movieApiData.original_language,
+        tagline: movieApiData.tagline || "",
+        voteAverage: movieApiData.vote_average,
+        runtime: movieApiData.runtime || 0,
+      };
+
+      movie = await Movie.create(movieDetails);
+    }
+
+    const showsToCreate = [];
+    showsInput.forEach((show) => {
+      const showDate = show.date;
+      show.times.forEach((time) => {
+        const showDateTime = new Date(`${showDate}T${time}`);
+        showsToCreate.push({
+          movie: movie._id,
+          showDateTime,
+          showPrice,
+          occupiedSeats: {},
+        });
+      });
+    });
+
+    if (showsToCreate.length === 0) {
+      throw new Error("No shows to add");
+    } else {
+      const newShows = await Show.insertMany(showsToCreate);
+      return newShows;
+    }
+  } catch (error) {
+    console.error("Error adding new show:", error);
+    throw error;
+  }
+};
+
 const showService = {
   getNowPlayingShows,
+  addShow,
 };
+
 export default showService;

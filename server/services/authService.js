@@ -3,8 +3,11 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import crypto from "crypto";
 
+// eslint-disable-next-line no-undef
 const APP_ID = process.env.FACEBOOK_APP_ID;
+// eslint-disable-next-line no-undef
 const APP_SECRET = process.env.FACEBOOK_APP_SECRET;
+// eslint-disable-next-line no-undef
 const REDIRECT_URI = process.env.FACEBOOK_REDIRECT_URI;
 
 const register = async (username, email, password) => {
@@ -27,11 +30,13 @@ const login = async (email, password) => {
   if (!isMatch) {
     throw new Error("Invalid credentials");
   }
+  // eslint-disable-next-line no-undef
   const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
   const refreshToken = jwt.sign(
     { userId: user._id },
+    // eslint-disable-next-line no-undef
     process.env.JWT_REFRESH_SECRET,
     { expiresIn: "7d" }
   );
@@ -50,7 +55,9 @@ const getProfile = async (userId) => {
 };
 
 const refreshAccessToken = (token) => {
+  // eslint-disable-next-line no-undef
   const { userId } = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+  // eslint-disable-next-line no-undef
   const newAccessToken = jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
@@ -62,10 +69,12 @@ const getFacebookAuthUrl = async (req, res) => {
   // lưu state vào session/redis/cookie để đối chiếu
   const stateJwt = jwt.sign(
     { state: state },
+    // eslint-disable-next-line no-undef
     process.env.JWT_SECRET,
     { expiresIn: "5m" } // state chỉ hợp lệ 5 phút
   );
   console.log(stateJwt);
+  // eslint-disable-next-line no-undef
   const authUrl = new URL(process.env.FACEBOOK_AUTH_URL);
   authUrl.searchParams.set("client_id", APP_ID);
   authUrl.searchParams.set("redirect_uri", REDIRECT_URI);
@@ -117,11 +126,13 @@ const handleFacebookCallback = async (code) => {
   }
 
   // 4) Trả về access token và refresh token cho fe
+  // eslint-disable-next-line no-undef
   const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
   const refreshToken = jwt.sign(
     { userId: user._id },
+    // eslint-disable-next-line no-undef
     process.env.JWT_REFRESH_SECRET,
     { expiresIn: "7d" }
   );

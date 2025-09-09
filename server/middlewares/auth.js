@@ -27,9 +27,21 @@ const auth = async (req, res, next) => {
   } catch (error) {
     res.status(401).json({ 
       success: false,
-      message: 'Token is not valid' 
+      message: error.message || 'Token is not valid'
     });
   }
 };
+
+export const isAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ 
+      success: false,
+      message: 'Access denied, admin only' 
+    });
+  }
+};
+
 
 export default auth;

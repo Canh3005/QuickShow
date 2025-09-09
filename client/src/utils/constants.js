@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
   },
   SHOW: {
     NOW_PLAYING: "/show/get-now-playing",
+    ADD: "/show/add-show",
   },
 };
 
